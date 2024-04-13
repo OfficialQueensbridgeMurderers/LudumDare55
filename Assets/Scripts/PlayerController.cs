@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Rigidbody rigidbody;
+    public GameObject attack;
+    new Rigidbody rigidbody;
     float xVel = 0;
     float yVel = 0;
 
@@ -14,8 +15,8 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 10;
     public float fastFallSpeed = 5;
     public bool touchingGround = false;
-    bool wasTouchingGround = false;
     bool releasedUp = true;
+    bool attackOnCooldown = false;
 
     public int doubleJump = 1;
     public bool fastFell = false;
@@ -37,7 +38,54 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleMovement();
+        HandleAttack();
+    }
 
+    private void HandleAttack()
+    {
+        if (attackOnCooldown){
+            return;
+        }
+
+        //UP
+        if (Input.GetAxis("VerticalSecondary") > 0)
+        {
+            Attack(0, 1);
+        }
+        //RIGHT
+        else if (Input.GetAxis("HorizontalSecondary") > 0)
+        {
+            Attack(1, 0);
+        }
+        //DOWN
+        else if (Input.GetAxis("VerticalSecondary") < 0)
+        {
+            Attack(0, -1);
+        }
+        //LEFT
+        else if (Input.GetAxis("HorizontalSecondary") < 0)
+        {
+            Attack(-1, 0);
+        }
+        
+    }
+
+    private void ResetAttackCooldown(){
+        attackOnCooldown = false;
+    }
+
+    private void Attack(float xScaleFactor, float yScaleFactor)
+    {
+        attackOnCooldown = true;
+        Invoke(nameof(ResetAttackCooldown), 0.75f);
+        GameObject spawnedAttack = Instantiate(attack, transform.position + new Vector3(-0.25f, -0.25f, 0), Quaternion.identity);
+        spawnedAttack.GetComponent<HitboxController>().SetScaleFactor(xScaleFactor, yScaleFactor);
+        spawnedAttack.transform.SetParent(transform);
+    }
+    
+    private void HandleMovement()
+    {
         float velLeft = 0;
         if (Input.GetAxis("Horizontal") < 0)
         {
@@ -85,10 +133,6 @@ public class PlayerController : MonoBehaviour
         xVel = velLeft + velRight;
         
         rigidbody.velocity = new Vector3(xVel, yVel, 0);
-    }
-
-    private void GetLeft(){
-        //return Input.GetKey(KeyCode.A) || Input.GetAxis()
     }
 }
 
