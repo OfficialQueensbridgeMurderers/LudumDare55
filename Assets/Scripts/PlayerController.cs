@@ -27,8 +27,18 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
-        touchingGround = true;
-        doubleJump = 1;
+        if (other.gameObject.tag == "Enemy"){
+            //Invicibility period
+            if (!other.gameObject.GetComponent<Enemy>().dead){
+                Debug.Log("Player Hit");
+            }
+            
+        }
+        else{
+            touchingGround = true;
+            doubleJump = 1;
+        }
+        
     }
 
     private void OnCollisionExit(Collision other) {
