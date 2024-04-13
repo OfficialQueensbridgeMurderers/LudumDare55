@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Enemy"){
             //Invicibility period
             if (!other.gameObject.GetComponent<Enemy>().dead){
-                //Debug.Log("Player Hit");
+                Debug.Log("Player Hit");
             }
             
         }
@@ -39,6 +39,13 @@ public class PlayerController : MonoBehaviour
             doubleJump = 1;
         }
         
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Projectile"){
+            Debug.Log("Player Hit");
+            Destroy(other.gameObject);
+        }
     }
 
     private void OnCollisionExit(Collision other) {

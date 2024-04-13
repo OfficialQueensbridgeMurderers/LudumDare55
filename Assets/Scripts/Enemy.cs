@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     public float leapCooldown = 3;
     public bool leapOnCooldown = true;
     protected Transform playerTransform;
+    protected bool preventDoubleHit = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,17 +55,25 @@ public class Enemy : MonoBehaviour
     
     public void Hit(Vector3 hitDirection){
         //Destroy(gameObject);
-        if (!dead){
-            Death(hitDirection);
+        if (!preventDoubleHit){
+            preventDoubleHit = true;
+            Invoke(nameof(ResetPreventDoubleHit), 0.5f);
+            if (!dead){
+                Death(hitDirection);
+            }
+            else{
+                Sacrifice();
+            }
         }
-        else{
-            Sacrifice();
-        }
+    }
+
+    protected void ResetPreventDoubleHit(){
+        preventDoubleHit = false;
     }
 
     protected virtual void Sacrifice(){
         SacrificeManager sacrificeManager = GameObject.Find("SacrificeManager").GetComponent<SacrificeManager>();
-        sacrificeManager.SacrificeLeaper();
+        sacrificeManager.SacrificeLeaper(transform.position);
         Destroy(gameObject);
     }
 
@@ -72,6 +81,9 @@ public class Enemy : MonoBehaviour
         dead = true;
 
         GetComponent<Renderer>().material = deadMat;
+
+        rigidbody.isKinematic = false;
+        rigidbody.useGravity = true;
 
         rigidbody.constraints &= ~RigidbodyConstraints.FreezeRotationX;
         rigidbody.constraints &= ~RigidbodyConstraints.FreezeRotationY;

@@ -21,6 +21,10 @@ public class Hitbox : MonoBehaviour
             Vector3 direction = other.transform.position - transform.position;
             other.gameObject.SendMessage("Hit", direction);
         }
+
+        if (other.tag == "Projectile"){
+            Destroy(other.gameObject);
+        }
         
     }
 }
