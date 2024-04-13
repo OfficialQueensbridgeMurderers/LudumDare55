@@ -6,16 +6,16 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public bool dead = false;
-    private new Rigidbody rigidbody;
+    protected new Rigidbody rigidbody;
 
-    float minRotationSpeed = 200;
-    float maxRotationSpeed = 500;
+    protected float minRotationSpeed = 200;
+    protected float maxRotationSpeed = 500;
     public Material deadMat;
 
     public float leapForce = 10f;
     public float leapCooldown = 3;
     public bool leapOnCooldown = true;
-    Transform playerTransform;
+    protected Transform playerTransform;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,12 +28,9 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         HandleMovement();
-        HandleAttack();
-
-        
     }
 
-    private void ResetLeapCooldown(){
+    protected void ResetLeapCooldown(){
         leapOnCooldown = false;
     }
 
@@ -54,11 +51,6 @@ public class Enemy : MonoBehaviour
 
         leapOnCooldown = true;
     }
-
-    protected virtual void HandleAttack()
-    {
-
-    }
     
     public void Hit(Vector3 hitDirection){
         //Destroy(gameObject);
@@ -76,7 +68,7 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void Death(Vector3 hitDirection){
+    protected void Death(Vector3 hitDirection){
         dead = true;
 
         GetComponent<Renderer>().material = deadMat;
@@ -94,6 +86,6 @@ public class Enemy : MonoBehaviour
         // Apply the random rotation velocity to the Rigidbody
         rigidbody.angularVelocity = new Vector3(xSpeed, ySpeed, zSpeed);
 
-        Debug.Log("force added");
+        //Debug.Log("force added");
     }
 }

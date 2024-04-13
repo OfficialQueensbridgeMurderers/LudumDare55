@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Enemy"){
             //Invicibility period
             if (!other.gameObject.GetComponent<Enemy>().dead){
-                Debug.Log("Player Hit");
+                //Debug.Log("Player Hit");
             }
             
         }
