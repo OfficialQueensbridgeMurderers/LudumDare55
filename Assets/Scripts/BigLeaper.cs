@@ -20,7 +20,7 @@ public class BigLeaper : Enemy
     
 
     private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Enemy"){
+        if (other.gameObject.tag == "Enemy" && other.gameObject.GetComponent<BigLeaper>() == null){
             other.gameObject.SendMessage("Hit", other.gameObject.transform.position - transform.position);
         }
     }

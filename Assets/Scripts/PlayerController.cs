@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public float range = 5;
     bool wallJumping = false;
     float wallJumpingFactor = 0;
+    public float enemyDamage = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +56,10 @@ public class PlayerController : MonoBehaviour
             
         }
         
+    }
+
+    public void MainMenu(){
+        SceneManager.LoadScene("Menu");
     }
 
     public void Heal(float amount){
@@ -93,7 +98,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         GetComponent<Renderer>().material = hitMat;
-        currentHealth--;
+        currentHealth -= enemyDamage;
         justHit = true;
         healthBar.fillAmount = currentHealth / maxHealth;
         if (currentHealth <= 0){

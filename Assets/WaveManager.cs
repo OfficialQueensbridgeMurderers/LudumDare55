@@ -32,6 +32,17 @@ public class WaveManager : MonoBehaviour
         leapToSpawn = round * leapPerRound;
         allEnemiesSpawned = false;
         Invoke(nameof(ResetSpawnDelay), spawnDelay);
+        spawnDelay -= 0.5f;
+        if (spawnDelay < 1){
+            spawnDelay = 1;
+        }
+
+        float enemyDamage = round / 2;
+        if (enemyDamage < 1){
+            enemyDamage = 1;
+        }
+
+        GameObject.Find("Player").GetComponent<PlayerController>().enemyDamage = enemyDamage;
     }
 
     private void ResetSpawnDelay(){

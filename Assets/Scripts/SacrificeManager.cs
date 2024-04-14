@@ -30,6 +30,8 @@ public class SacrificeManager : MonoBehaviour
     public GameObject blue1;
     public GameObject blue2;
     public GameObject blue3;
+    public GameObject blueSoul;
+    public GameObject orangeSoul;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,8 +59,10 @@ public class SacrificeManager : MonoBehaviour
         }
         else{
             leaperSacrifices++;
+            GameObject spawnedSoul = Instantiate(orangeSoul, position, Quaternion.identity);
+            spawnedSoul.GetComponent<Soul>().target = bigLeaperSpawnPos;
 
-            if (leaperSacrificesNeeded == leaperSacrifices && spawnedBigLeaper == null){
+            if (leaperSacrificesNeeded == leaperSacrifices){
                 leaperSacrifices = 0;
                 //Debug.Log("Summon Big Leaper");
                 spawnedBigLeaper = Instantiate(bigLeaper, bigLeaperSpawnPos.position, Quaternion.identity);
@@ -75,6 +79,8 @@ public class SacrificeManager : MonoBehaviour
         }
         else{
             flyingSacrifices++;
+            GameObject spawnedSoul = Instantiate(blueSoul, position, Quaternion.identity);
+            spawnedSoul.GetComponent<Soul>().target = bigLeaperSpawnPos;
 
             if (flyingSacrificesNeeded == flyingSacrifices){
                 flyingSacrifices = 0;
@@ -120,14 +126,29 @@ public class SacrificeManager : MonoBehaviour
     }
 
     private void CollectSoul(Vector3 position, SoulType type){
+        switch(type){
+            case SoulType.Leaper:
+                GameObject spawnedSoul = Instantiate(orangeSoul, position, Quaternion.identity);
+                spawnedSoul.GetComponent<Soul>().target = player.gameObject.transform;
+                break;
+            case SoulType.Flying:
+                GameObject spawnedSoull = Instantiate(blueSoul, position, Quaternion.identity);
+                spawnedSoull.GetComponent<Soul>().target = player.gameObject.transform;
+                break;
+        }
+
         spawnedSoulCollector.transform.position = position + new Vector3(0, 0, 2);
         if (player.IsFullHealth()){
             switch(type){
                 case SoulType.Leaper:
                     player.GiveRange(1);
+                    GameObject spawnedSoul = Instantiate(orangeSoul, position, Quaternion.identity);
+                    spawnedSoul.GetComponent<Soul>().target = player.gameObject.transform;
                     break;
                 case SoulType.Flying:
                     player.GiveMaxHealth(1);
+                    GameObject spawnedSoull = Instantiate(blueSoul, position, Quaternion.identity);
+                    spawnedSoull.GetComponent<Soul>().target = player.gameObject.transform;
                     break;
             }
         }

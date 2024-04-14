@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dead: 0
-  deadMat: {fileID: 2100000, guid: 5fdbc1ffc17a316428f890a31a5070c2, type: 2}
+  deadMat: {fileID: 2100000, guid: 7c5ff2d8cd72b6340b89d2dfd98f23da, type: 2}
   leapForce: 10
   leapCooldown: 3
   leapOnCooldown: 1
