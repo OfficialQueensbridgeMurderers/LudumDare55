@@ -9,7 +9,7 @@ public enum FlyingState{
 public class FlyingEnemy : Enemy
 {
     FlyingState currentState = FlyingState.Chasing;
-    float targetDistanceToPlayer = 3;
+    float targetDistanceToPlayer = 4;
     float moveSpeed = 4;
     bool shot = false;
     public GameObject projectile;
@@ -67,7 +67,7 @@ public class FlyingEnemy : Enemy
 
         Projectile spawnedProjectile = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Projectile>();
         spawnedProjectile.direction = (playerTransform.position - transform.position).normalized;
-        spawnedProjectile.speed = 10;
+        spawnedProjectile.speed = 7;
 
     }
 }

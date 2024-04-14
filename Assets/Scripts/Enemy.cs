@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     public Material deadMat;
 
     public float leapForce = 10f;
-    public float leapCooldown = 3;
+    public float leapCooldown = 2;
     public bool leapOnCooldown = true;
     protected Transform playerTransform;
     protected bool preventDoubleHit = false;
@@ -22,7 +22,8 @@ public class Enemy : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody>();
         playerTransform = GameObject.Find("Player").transform;
-        Invoke(nameof(ResetLeapCooldown), leapCooldown);
+        float randomNumber = Random.Range(0f, 2f);
+        Invoke(nameof(ResetLeapCooldown), randomNumber);
     }
 
     // Update is called once per frame
@@ -45,8 +46,17 @@ public class Enemy : MonoBehaviour
         // Calculate the direction vector from current position to player's position
         Vector3 direction = (playerTransform.position - transform.position).normalized;
 
+        if (direction.y < 0){
+            if (direction.x > 0){
+                direction.x += direction.y *-1;
+            }
+            else{
+                direction.x += direction.y;
+            }
+        }
+
         // Apply a force in the calculated direction to make the object leap towards the player
-        rigidbody.AddForce((direction * leapForce) + Vector3.up * 2, ForceMode.Impulse);
+        rigidbody.AddForce((direction * leapForce) + Vector3.up * 4, ForceMode.Impulse);
 
         Invoke(nameof(ResetLeapCooldown), leapCooldown);
 
@@ -57,7 +67,7 @@ public class Enemy : MonoBehaviour
         //Destroy(gameObject);
         if (!preventDoubleHit){
             preventDoubleHit = true;
-            Invoke(nameof(ResetPreventDoubleHit), 0.5f);
+            Invoke(nameof(ResetPreventDoubleHit), 0.4f);
             if (!dead){
                 Death(hitDirection);
             }

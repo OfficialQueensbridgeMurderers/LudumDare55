@@ -20,10 +20,13 @@ public class SacrificeManager : MonoBehaviour
     float soulCollectorDuration = 15;
     float elapsed = 0;
     bool soulCollector = false;
+    public int kills = 0;
+    PlayerController player;
+    GameObject spawnedBigLeaper = null;
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -40,22 +43,24 @@ public class SacrificeManager : MonoBehaviour
 
     public void SacrificeLeaper(Vector3 position)
     {
+        kills++;
         if (soulCollector){
             CollectSoul(position, SoulType.Leaper);
         }
         else{
             leaperSacrifices++;
 
-            if (leaperSacrificesNeeded == leaperSacrifices){
+            if (leaperSacrificesNeeded == leaperSacrifices && spawnedBigLeaper == null){
                 leaperSacrifices = 0;
                 //Debug.Log("Summon Big Leaper");
-                Instantiate(bigLeaper, bigLeaperSpawnPos.position, Quaternion.identity);
+                spawnedBigLeaper = Instantiate(bigLeaper, bigLeaperSpawnPos.position, Quaternion.identity);
             }
         }
     }
 
     public void SacrificeFlyingEnemy(Vector3 position)
     {
+        kills++;
         if (soulCollector){
             CollectSoul(position, SoulType.Flying);
         }
@@ -73,6 +78,20 @@ public class SacrificeManager : MonoBehaviour
     }
 
     private void CollectSoul(Vector3 position, SoulType type){
-        spawnedSoulCollector.transform.position = position;
+        spawnedSoulCollector.transform.position = position + new Vector3(0, 0, 2);
+        if (player.IsFullHealth()){
+            switch(type){
+                case SoulType.Leaper:
+                    player.GiveRange(1);
+                    break;
+                case SoulType.Flying:
+                    player.GiveMaxHealth(1);
+                    break;
+            }
+        }
+        else{
+            player.Heal(1);
+        }
+        
     }
 }

@@ -67,8 +67,17 @@ public class BigLeaper : Enemy
         // Calculate the direction vector from current position to player's position
         Vector3 direction = (target.position - transform.position).normalized;
 
+        if (direction.y < 0){
+            if (direction.x > 0){
+                direction.x += direction.y *-1;
+            }
+            else{
+                direction.x += direction.y;
+            }
+        }
+
         // Apply a force in the calculated direction to make the object leap towards the player
-        rigidbody.AddForce((direction * leapForce) + Vector3.up * 2, ForceMode.Impulse);
+        rigidbody.AddForce((direction * leapForce) + Vector3.up * 4, ForceMode.Impulse);
 
         Invoke(nameof(ResetLeapCooldown), leapCooldown);
 
