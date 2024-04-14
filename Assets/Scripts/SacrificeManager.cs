@@ -23,10 +23,18 @@ public class SacrificeManager : MonoBehaviour
     public int kills = 0;
     PlayerController player;
     GameObject spawnedBigLeaper = null;
+    
+    public GameObject red1;
+    public GameObject red2;
+    public GameObject red3;
+    public GameObject blue1;
+    public GameObject blue2;
+    public GameObject blue3;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        UpdateIndicators();
     }
 
     // Update is called once per frame
@@ -56,6 +64,7 @@ public class SacrificeManager : MonoBehaviour
                 spawnedBigLeaper = Instantiate(bigLeaper, bigLeaperSpawnPos.position, Quaternion.identity);
             }
         }
+        UpdateIndicators();
     }
 
     public void SacrificeFlyingEnemy(Vector3 position)
@@ -69,12 +78,45 @@ public class SacrificeManager : MonoBehaviour
 
             if (flyingSacrificesNeeded == flyingSacrifices){
                 flyingSacrifices = 0;
-                spawnedSoulCollector = Instantiate(soulCollectorPrefab, bigLeaperSpawnPos.position, Quaternion.identity);
+                spawnedSoulCollector = Instantiate(soulCollectorPrefab, bigLeaperSpawnPos.position + new Vector3(0, 0, 2), Quaternion.identity);
                 soulCollector = true;
                 elapsed = 0;
             }
         }
-        
+        UpdateIndicators();
+    }
+
+    private void UpdateIndicators(){
+        red1.SetActive(false);
+        red2.SetActive(false);
+        red3.SetActive(false);
+        blue1.SetActive(false);
+        blue2.SetActive(false);
+        blue3.SetActive(false);
+
+        if (flyingSacrifices >= 1){
+            blue1.SetActive(true);
+        }
+
+        if (flyingSacrifices >= 2){
+            blue2.SetActive(true);
+        }
+
+        if (flyingSacrifices >= 3){
+            blue3.SetActive(true);
+        }
+
+        if (leaperSacrifices >= 1){
+            red1.SetActive(true);
+        }
+
+        if (leaperSacrifices >= 2){
+            red2.SetActive(true);
+        }
+
+        if (leaperSacrifices >= 3){
+            red3.SetActive(true);
+        }
     }
 
     private void CollectSoul(Vector3 position, SoulType type){
